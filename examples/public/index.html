@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>zk-mdl-kit Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      width: 100%;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+
+    .feature-list {
+      background: #f7f9fc;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .feature-list h2 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .feature-list ul {
+      list-style: none;
+    }
+
+    .feature-list li {
+      padding: 8px 0;
+      color: #555;
+      display: flex;
+      align-items: center;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      color: #667eea;
+      font-weight: bold;
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    .button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 15px;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .button:active {
+      transform: translateY(0);
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status {
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .status.error {
+      background: #fee;
+      color: #c33;
+      border: 1px solid #fcc;
+    }
+
+    .status.success {
+      background: #efe;
+      color: #383;
+      border: 1px solid #cfc;
+    }
+
+    .status.info {
+      background: #eef;
+      color: #338;
+      border: 1px solid #ccf;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f7f9fc;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result h3 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-label {
+      color: #666;
+      font-weight: 500;
+    }
+
+    .result-value {
+      color: #333;
+      font-weight: 600;
+    }
+
+    .result-value.true {
+      color: #4caf50;
+    }
+
+    .result-value.false {
+      color: #f44336;
+    }
+
+    .note {
+      background: #fff9e6;
+      border: 1px solid #ffeb3b;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .note strong {
+      color: #333;
+    }
+
+    .code {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 zk-mdl-kit Demo</h1>
+    <p class="subtitle">Test mobile driver's license verification with Digital Credentials API</p>
+
+    <div class="feature-list">
+      <h2>What This Demo Does</h2>
+      <ul>
+        <li>Requests age verification (21+) from your mobile wallet</li>
+        <li>Verifies zero-knowledge proof or standard mDL</li>
+        <li>Returns minimal predicates (not raw PII)</li>
+        <li>Works with Google Wallet, Apple Wallet, and compatible wallets</li>
+      </ul>
+    </div>
+
+    <button id="verifyBtn" class="button">
+      📱 Verify with Digital ID
+    </button>
+
+    <button id="requestDerivedBtn" class="button" style="display: none;">
+      🎫 Request Derived Credential
+    </button>
+
+    <div id="status" class="status"></div>
+    <div id="result" class="result"></div>
+
+    <div class="note">
+      <strong>Note:</strong> This demo requires Chrome 141+ or Safari with Digital Credentials API enabled. 
+      You must have a compatible mDL in your mobile wallet (Google Wallet, Apple Wallet, etc.).
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
+

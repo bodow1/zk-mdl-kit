@@ -1,5 +1,13 @@
 # zk-mdl-kit
 
+![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Status](https://img.shields.io/badge/status-experimental-yellow)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
+
+> ⚠️ **IMPORTANT:** This is a reference implementation for educational and development purposes.  
+> For production deployment, review [SECURITY.md](SECURITY.md) and implement proper key management, rate limiting, and monitoring.
+
 A minimal, wallet-agnostic verifier and derived-VC bridge for online age/residency checks using **mobile driver's licenses (ISO mdoc/mDL)** and **web-native Verifiable Credentials**. The verifier accepts presentations from browser **Digital Credentials API** (DC-API) flows and can validate **zero-knowledge** proofs produced by wallets (e.g., Google Wallet with Longfellow ZK). The bridge issues **derived credentials** for repeat, privacy-reduced web use via **OID4VP/OID4VCI**. ([Chrome for Developers][1])
 
 ---
@@ -51,6 +59,26 @@ flowchart LR
 
 ## Installation
 
+### Option 1: Docker (Recommended)
+
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+Services will be available at:
+- Verifier: http://localhost:3000
+- Issuer: http://localhost:3001
+- Example: http://localhost:8080
+
+### Option 2: Local Development
+
 ```bash
 npm install
 ```
@@ -59,20 +87,11 @@ npm install
 
 Create a `.env` file in the root directory:
 
-```env
-# Verifier configuration
-PORT=3000
-LONGFELLOW_URL=http://localhost:8080
-
-# Trust configuration
-VICAL_URL=https://vical.dts.aamva.org
-TRUST_CACHE_DIR=./trust/cache
-ACCEPTED_JURISDICTIONS=CA,NY,FL
-
-# Issuer configuration
-ISSUER_PORT=3001
-DERIVED_VC_TTL=86400
+```bash
+cp .env.example .env
 ```
+
+**⚠️ NEVER commit `.env` or key files to version control!**
 
 ---
 

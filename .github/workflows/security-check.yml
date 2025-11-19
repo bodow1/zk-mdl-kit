@@ -1,0 +1,53 @@
+name: Security Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check for secrets
+      run: |
+        echo "Checking for accidentally committed secrets..."
+        if git ls-files | grep -E '(\.env$|\.reader-keys\.json|\.issuer-keys\.json|\.pem$|\.key$)'; then
+          echo "❌ ERROR: Secret files found in repository!"
+          echo "Please remove these files immediately:"
+          git ls-files | grep -E '(\.env$|\.reader-keys\.json|\.issuer-keys\.json|\.pem$|\.key$)'
+          exit 1
+        fi
+        echo "✅ No secret files found"
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run npm audit
+      run: npm audit --audit-level=moderate || true
+    
+    - name: Check .gitignore
+      run: |
+        echo "Checking .gitignore has required patterns..."
+        required_patterns=(".reader-keys.json" ".issuer-keys.json" ".env" "*.pem" "*.key")
+        missing=0
+        for pattern in "${required_patterns[@]}"; do
+          if ! grep -q "$pattern" .gitignore; then
+            echo "❌ Missing pattern in .gitignore: $pattern"
+            missing=1
+          fi
+        done
+        if [ $missing -eq 1 ]; then
+          exit 1
+        fi
+        echo "✅ All required patterns in .gitignore"
+

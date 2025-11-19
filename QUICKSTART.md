@@ -19,6 +19,18 @@ cp .env.example .env
 
 ## Start Services
 
+### Option 1: Docker (Easiest)
+
+```bash
+npm run docker:up
+# All services start automatically!
+# Verifier: http://localhost:3000
+# Issuer: http://localhost:3001
+# Example: http://localhost:8080
+```
+
+### Option 2: Local (Development)
+
 Open **three terminal windows** and run:
 
 **Terminal 1:**

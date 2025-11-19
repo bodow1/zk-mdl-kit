@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  verifier:
+    build:
+      context: .
+      dockerfile: Dockerfile.verifier
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - LONGFELLOW_URL=http://longfellow:8080
+      - NODE_ENV=development
+    volumes:
+      - ./verifier:/app/verifier
+      - ./trust:/app/trust
+    networks:
+      - zk-mdl-network
+    restart: unless-stopped
+
+  issuer:
+    build:
+      context: .
+      dockerfile: Dockerfile.issuer
+    ports:
+      - "3001:3001"
+    environment:
+      - ISSUER_PORT=3001
+      - NODE_ENV=development
+    volumes:
+      - ./issuer:/app/issuer
+    networks:
+      - zk-mdl-network
+    restart: unless-stopped
+
+  example:
+    build:
+      context: .
+      dockerfile: Dockerfile.example
+    ports:
+      - "8080:8080"
+    environment:
+      - EXAMPLE_PORT=8080
+      - VERIFIER_URL=http://verifier:3000
+      - ISSUER_URL=http://issuer:3001
+    volumes:
+      - ./examples:/app/examples
+    networks:
+      - zk-mdl-network
+    restart: unless-stopped
+
+  # Optional: Longfellow ZK verifier service
+  # Uncomment to enable real ZK verification
+  # longfellow:
+  #   image: ghcr.io/google/longfellow-zk:latest
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - zk-mdl-network
+  #   restart: unless-stopped
+
+networks:
+  zk-mdl-network:
+    driver: bridge
+

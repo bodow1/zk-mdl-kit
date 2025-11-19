@@ -6,3 +6,9 @@ trust/cache/
 dist/
 build/
 
+# Private keys (NEVER commit these!)
+.reader-keys.json
+.issuer-keys.json
+*.pem
+*.key
+
